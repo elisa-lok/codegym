@@ -16,6 +16,7 @@ const QuestionList = () => {
 
   const [questionsList, setQuestionsList] = useState([]);
   const [selectedOption, setSelectedOption] = useState(questionsTags[0].value);
+  const [isShowAlert, setIsShowAlert] = useState(false);
 
   const questionsUrl = 'http://localhost:3000/api/v1/questions';
 
@@ -93,6 +94,11 @@ const QuestionList = () => {
     .then((data) => {
       console.log(data);
       setQuestionsList(data);
+      if (data.length == 0) {
+        setIsShowAlert(true);
+      } else {
+        setIsShowAlert(false);
+      }
     })
   }
 
@@ -112,8 +118,10 @@ const QuestionList = () => {
           questionsList.length > 0 ? 
           questionsList.map((question) =>
           <QuestionDetail question={question} key={question.id} />
-            ) : <EmptyQuestionMessage tagname={questionsTags[selectedOption].label} />
+            ) : ''
         } 
+
+        {isShowAlert && <EmptyQuestionMessage tagname={questionsTags[selectedOption].label} />}
       </div>      
      </div>
    )
