@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import * as ReactDOM from "react-dom";
+import ServerSideError from "./ServerSideError";
 
 const NewQuestion = () => {
   const questionsTags = [
@@ -23,6 +24,9 @@ const NewQuestion = () => {
   //   setTag(event.target.value);
   // };
 
+  const [isServerSideError, setIsServerSideError] = useState(false);
+  const [serverErrors, setServerErrors] = useState([]);
+
   const [formField, setFormField] = useState({
     title: "",
     tag: questionsTags[0].value,
@@ -42,13 +46,22 @@ const NewQuestion = () => {
     fetch(`/api/v1/questions`, {
       method: "POST",
       headers: {
-        'Content-Type': "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        if (data["status"] === "failure") {
+          setIsServerSideError(true);
+          setServerErrors(data["data"]);
+        } else {
+          setIsServerSideError(false);
+          setServerErrors([]);
+          document.getElementById("close-modal").click();
+          window.location.reload();
+        }
       })
       .catch((error) => {
         console.log("Error:", error);
@@ -78,6 +91,7 @@ const NewQuestion = () => {
           </div>
           <form onSubmit={handleQuestionSubmit}>
             <div className="modal-body">
+              {isServerSideError && <ServerSideError errors={serverErrors} />}
               <div className="form-group">
                 <label className="form-lable mt-3 mb-3">Title</label>
                 <input
@@ -109,6 +123,7 @@ const NewQuestion = () => {
 
             <div className="modal-footer">
               <button
+                id="close-modal"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
