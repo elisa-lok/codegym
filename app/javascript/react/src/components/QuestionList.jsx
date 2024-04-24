@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom";
 import QuestionDetail from "./QuestionDetail";
 import EmptyQuestionMessage from "./EmptyQuestionMessage";
 import Loader from "./Loader";
+import NewQuestion from "./NewQuestion";
 
 const QuestionList = () => {
   const questionsTags = [
@@ -110,6 +111,14 @@ const QuestionList = () => {
     <div className="row">
       <div className="col-lg-10 mx-auto">
         <p className="lead fw-bold">Filter questions by tags</p>
+        <button
+          type="button"
+          className="btn btn-primary mt-3 mb-3"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          Contribute your question
+        </button>
         <select
           className="form-select form-select-lg"
           value={selectedOption}
@@ -134,6 +143,7 @@ const QuestionList = () => {
           <EmptyQuestionMessage tagname={questionsTags[selectedOption].label} />
         )}
       </div>
+      <NewQuestion />
     </div>
   );
 };
