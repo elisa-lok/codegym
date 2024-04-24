@@ -4,12 +4,12 @@ import * as ReactDOM from "react-dom";
 
 const NewQuestion = () => {
   const questionsTags = [
-    { label: "Ruby", value: 0 },
-    { label: "Rails", value: 1 },
-    { label: "React", value: 2 },
-    { label: "Bootstrap", value: 3 },
-    { label: "Javascript", value: 4 },
-    { label: "Data Structure", value: 5 },
+    { label: "Ruby", value: "Ruby" },
+    { label: "Rails", value: "Rails" },
+    { label: "React", value: "React" },
+    { label: "Bootstrap", value: "Bootstrap" },
+    { label: "Javascript", value: "Javascript" },
+    { label: "Data Structure", value: "Data Structure" },
   ];
 
   // const [title, setTitle] = useState("");
@@ -35,6 +35,24 @@ const NewQuestion = () => {
   const handleQuestionSubmit = (event) => {
     event.preventDefault();
     console.log(formField);
+    createQuestion(formField);
+  };
+
+  const createQuestion = (data) => {
+    fetch(`/api/v1/questions`, {
+      method: "POST",
+      headers: {
+        'Content-Type': "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   };
 
   return (
